@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<!-- 지도를 담을 영역 만들기 -->
+<div id="map" style="width:500px;height:400px;"></div>
+
+
+
+
+<!-- 실제 지도를 그리는 Javascript API를 불러오기 -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapApiKey}"></script>
+<!-- src에 // 라는 상대 프로토콜을 사용해서 사용자의 http, https 환경에 따라 자동으로 해당 프로토콜을 따라간다 -->
+
+<!-- 지도 불러오는 스크립트 -->
+<script>
+var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+var options = { //지도를 생성할 때 필요한 기본 옵션
+	center: new kakao.maps.LatLng(33.450501, 126.570667), //지도의 중심좌표.
+	level: 3 //지도의 레벨(확대, 축소 정도)
+};
+
+var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+/* 
+center에 할당할 값은 LatLng 클래스를 사용하여 생성한다.
+흔히 위경도 좌표라고 부르는 WGS94 좌표계의 좌표값을 넣어서 만든다. (위도 , 경도 순서)
+ */
+ 
+</script>
+
+
+
+</body>
+</html>
