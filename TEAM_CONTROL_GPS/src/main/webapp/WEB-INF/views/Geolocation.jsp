@@ -8,13 +8,16 @@
 
 </head>
 <body>
- 사용자 위치 확인
- <div id="UserLocationInfo"></div>
+<form class="locationform"  method="post">
+ 사용자 이름:<input type="text" id="name"> 
+ 핸드폰 번호:<input type="text" id="phone"> 
  
-   <ul>
-        <li>위도:<span id="latitude"></span></li>
-        <li>경도:<span id="longitude"></span></li>
-    </ul>
+ <button type="button" id="btnStart"> 확인 </button>
+ 
+        위도:<span id="x"></span>
+        경도:<span id="y"></span>
+        
+</form> 
     
  <input id="btnStop" type="button" value="감시를 끝낸다" />
     

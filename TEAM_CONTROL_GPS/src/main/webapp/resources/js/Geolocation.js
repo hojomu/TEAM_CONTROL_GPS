@@ -1,93 +1,148 @@
-/* 비동기적으로 현재 위치를 알아내어 지정된 요소에 출력한다. */
-function whereami(elt) {
-    // 이 객체를 getCurrentPosition() 메서드의 세번째 인자로 전달한다.
-    var options = {
-        // 가능한 경우, 높은 정확도의 위치(예를 들어, GPS 등) 를 읽어오려면 true로 설정
-        // 그러나 이 기능은 배터리 지속 시간에 영향을 미친다. 
-        enableHighAccuracy: false, // 대략적인 값이라도 상관 없음: 기본값
+/*$(function() {
+  if (navigator.geolocation) {
+    let beforePosition = null;
 
-        // 위치 정보가 충분히 캐시되었으면, 이 프로퍼티를 설정하자, 
-        // 위치 정보를 강제로 재확인하기 위해 사용하기도 하는 이 값의 기본 값은 0이다.
-        maximumAge: 30000,     // 5분이 지나기 전까지는 수정되지 않아도 됨
+    // 위치 정보를 가져오는 함수
+    const getPosition = function() {
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const currentCoords = {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          };
 
-        // 위치 정보를 받기 위해 얼마나 오랫동안 대기할 것인가?
-        // 기본값은 Infinity이므로 getCurrentPosition()은 무한정 대기한다.
-        timeout: 15000    // 15초 이상 기다리지 않는다.
-    }
+          if (beforePosition !== null) {
+            const dist = getDistance(
+              beforePosition.latitude,
+              beforePosition.longitude,
+              currentCoords.latitude,
+              currentCoords.longitude
+            );
 
-    if(navigator.geolocation) // geolocation 을 지원한다면 위치를 요청한다. 
-        navigator.geolocation.getCurrentPosition(success, error, options);
-    else
-        elt.innerHTML = "이 브라우저에서는 Geolocation이 지원되지 않습니다.";
-
-
-    // geolocation 요청이 실패하면 이 함수를 호출한다.
-    function error(e) {
-        // 오류 객체에는 수치 코드와 텍스트 메시지가 존재한다.
-        // 코드 값은 다음과 같다.
-        // 1: 사용자가 위치 정보를 공유 권한을 제공하지 않음.
-        // 2: 브라우저가 위치를 가져올 수 없음.
-        // 3: 타임아웃이 발생됨.
-        elt.innerHTML = "Geolocation 오류 "+e.code +": " + e.message;
-    }
-
-
-    // geolocation 요청이 성공하면 이 함수가 호출된다.
-    function success(pos) {
-
-        console.log(pos); // [디버깅] Position 객체 내용 확인
-
-        // 항상 가져올 수 있는 필드들이다. timestamp는 coords 객체 내부에 있지 않고, 
-        // 외부에서 가져오는 필드라는 점에 주의하다. 
-        var msg = "당신은 " +
-            new Date(pos.timestamp).toLocaleString() + "에 " +
-            " 위도 " + pos.coords.latitude + 
-            " 경도 " + pos.coords.longitude + "에서 "+ 
-            " 약 " + pos.coords.accuracy + " 미터 떨어진 곳에 있습니다.";
-
-        // 해당 기기가 고도 (altitude)를 반환하면, 해당 정보를 추가한다.
-        if(pos.coords.altitude) {
-            msg += " 당신은 해발 " + pos.coords.altitude + " ± " + 
-                pos.coords.altitudeAccuracy + " 미터에 있습니다.";
+            // 50m 이상 이동이 있을 때만 업데이트
+            if (dist >= 0.05) {
+              $('#x').html(currentCoords.latitude);  // 위도 
+              $('#y').html(currentCoords.longitude); // 경도 
+              beforePosition = currentCoords;
+            }
+          } else {
+            // 최초 위치 정보 설정
+            $('#x').html(currentCoords.latitude);
+            $('#y').html(currentCoords.longitude);
+            beforePosition = currentCoords;
+          }
+        },
+        function(error) {
+          // 오류 처리
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              alert("위치 정보 사용 권한이 거부되었습니다.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              alert("위치 정보를 사용할 수 없습니다.");
+              break;
+            case error.TIMEOUT:
+              alert("위치 정보 요청 시간이 초과되었습니다.");
+              break;
+            case error.UNKNOWN_ERROR:
+              alert("알 수 없는 오류가 발생하였습니다.");
+              break;
+          }
         }
+      );
+    };
 
-        // 해당 기기가 속도와 북쪽 기준 각 (heading)을 반환한다면 역시 추가해준다.
-        if(pos.coords.speed) {
-            msg += " 당신은 " + pos.coords.heading + " 방향으로 " +
-                "초속 " + pos.coords.speed + "(m/s)의 속도로 움직이고 있습니다.";
-        }
+    // 특정 시간 간격으로 위치 정보 가져오기 (1시간마다)
+    const interval = setInterval(getPosition, 3600000); // 1시간(3,600,000 밀리초)마다 위치 정보 가져옴
 
-        elt.innerHTML = msg;     // 모든 위치 정보를 출력한다.
-    }    
-}
+    // 중지 버튼 클릭 시 감시 중지
+    $('#btnStop').click(function() {
+      clearInterval(interval);
+    });
+  } else {
+    alert("더이상 Geolocation이 지원되지 않습니다.");
+  }
 
+  function getDistance(lat1, lon1, lat2, lon2) {
+    // 거리 계산 로직
+    // 두 지점 간의 거리를 계산하여 반환
+  }
+});*/
 
-// 나의 위치정보를 출력할 객체 구하기
-var elt = document.getElementById("UserLocationInfo");
-
-// 나의 위치정보 출력하기
-whereami(elt);
-
-
-
-//실시간 현재 위치 받아오기
-$(function() {        
-    // Geolocation API에 액세스할 수 있는지를 확인
-    if (navigator.geolocation) {
-        //위치 정보를 정기적으로 얻기
-        var id = navigator.geolocation.watchPosition(
-                function(pos) {
-                    $('#latitude').html(pos.coords.latitude);     // 위도 
-                    $('#longitude').html(pos.coords.longitude); // 경도 
-                });
+$(function() {
+  if (navigator.geolocation) {
+    const saveLocation = function(latitude, longitude) {
+      // 사용자 이름과 핸드폰 번호 가져오기
+        const name = $('#name').val();
+        const phone = $('#phone').val();
         
-        // 버튼 클릭으로 감시를 중지
-        $('#btnStop').click(function() {
-            navigator.geolocation.clearWatch(id);
-        });
-    } else {
-        alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.")
-    }
-    
-});
+      // AJAX 요청을 통해 서버에 데이터 전송
+      $.ajax({
+        url: '/Geolocation', // 서버의 저장 로직을 처리하는 엔드포인트 URL
+        method: 'POST',
+        data: {
+          name: name,
+          phone: phone,
+          x: latitude,
+          y: longitude
+   
+        },
+        success: function(response) {
+          console.log('위치 정보가 성공적으로 저장되었습니다.');
+        },
+        error: function(xhr, status, error) {
+          console.error('위치 정보 저장 중 오류가 발생했습니다:', error);
+        }
+      });
+    };
 
+    const getPosition = function() {
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const currentCoords = {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          };
+
+          $('#x').html(currentCoords.latitude);  // 위도 
+          $('#y').html(currentCoords.longitude); // 경도 
+
+          // 서버에 위치 정보 저장 요청
+          saveLocation(currentCoords.latitude, currentCoords.longitude);
+        },
+        function(error) {
+          // 오류 처리
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              alert("위치 정보 사용 권한이 거부되었습니다.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              alert("위치 정보를 사용할 수 없습니다.");
+              break;
+            case error.TIMEOUT:
+              alert("위치 정보 요청 시간이 초과되었습니다.");
+              break;
+            case error.UNKNOWN_ERROR:
+              alert("알 수 없는 오류가 발생하였습니다.");
+              break;
+          }
+        },
+        { timeout: 3000 } // 3초 내에 위치 정보 요청
+      );
+    };
+
+    let interval;
+
+    $('#btnStart').click(function() {
+      getPosition();
+      interval = setInterval(getPosition, 5000);
+    });
+
+    $('#btnStop').click(function() {
+      clearInterval(interval);
+    });
+
+  } else {
+    alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
+  }
+});
