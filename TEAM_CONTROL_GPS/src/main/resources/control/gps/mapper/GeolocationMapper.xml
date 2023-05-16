@@ -6,7 +6,7 @@
   
 <mapper namespace="control.gps.mapper.GeolocationMapper">
 
-<!-- 위치 정보 저장하기 insert -->
+<!-- 위치 정보 저장하기 insert / 현재시간 추가하기 -->
 	<insert id="Geolocation" >
 		insert into Locationdata(x, y, phone, name)
 		values(#{x}, #{y}, #{phone}, #{name} )

@@ -29,8 +29,5 @@ public class GeolocationController {
 		return "Geolocation";
 
 	}
-	
-	
-	
-	
+
 }

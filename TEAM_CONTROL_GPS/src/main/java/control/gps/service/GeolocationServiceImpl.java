@@ -17,9 +17,7 @@ public class GeolocationServiceImpl implements GeolocationService {
 	public void Geolocation(LocationdataVO data) {
 		rm.Geolocation(data);
 	}
-
-
-	}
+}
 	
 	
 

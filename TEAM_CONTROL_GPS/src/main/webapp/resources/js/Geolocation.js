@@ -1,3 +1,4 @@
+
 /*$(function() {
   if (navigator.geolocation) {
     let beforePosition = null;
