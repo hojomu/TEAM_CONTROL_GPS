@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/resources/css/member.css"></link>	
 </head>
 <body>
-<dev class="container">
+<div class="container">
   <form action="/member" method="post" id="member">
 	<div class="item">
 	    <table class="table1">
@@ -57,8 +57,8 @@
 	        </td>	        
 	      </tr>      
 	    </table>
-	</dev>	
+	</div>	
   </form>
-</dev>
+</div>
 </body>
 </html>
