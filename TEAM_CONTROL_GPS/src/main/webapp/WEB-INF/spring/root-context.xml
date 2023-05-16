@@ -31,8 +31,8 @@
    		<property name="locations" value="classpath:/application-API-KEY.properties" />
 	</bean>
 		
-	<mybatis-spring:scan base-package="control.project.mapper"/>	
+	<mybatis-spring:scan base-package="control.gps.mapper"/>	
 	
-	<context:component-scan base-package="control.project.service"/>
+	<context:component-scan base-package="control.gps.service"/>
 	
 </beans>
