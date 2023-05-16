@@ -6,7 +6,8 @@ public class LocationdataVO {
 	private double y;		
 	private String phone;			
 	private String getTime;
-	
+	private String name;
+
 	public double getX() {
 		return x;
 	}
@@ -32,9 +33,16 @@ public class LocationdataVO {
 		this.getTime = getTime;
 	}	
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	@Override
 	public String toString() {
-		return "LocationdataVO [x=" + x + ", y=" + y + ", phone=" + phone + ", getTime=" + getTime + "]";
+		return "LocationdataVO [x=" + x + ", y=" + y + ", phone=" + phone + ", getTime=" + getTime + ", phone=" + phone + "]";
 	}
 	
 }
