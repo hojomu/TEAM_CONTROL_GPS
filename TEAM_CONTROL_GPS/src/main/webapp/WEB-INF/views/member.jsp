@@ -15,8 +15,8 @@
 	<div class="item">
 	    <table class="table1">
 	      <colgroup>
-	        <col width="20%" />
-	        <col width="35%" /> 
+	        <col width="25%" />
+	        <col width="40%" /> 
 	      </colgroup>
 	      <tr>
 	        <td class="title1">성   명</td>
@@ -29,10 +29,6 @@
 	      <tr>
 	        <td class="title1">휴대폰번호</td>
 	        <td class="content1"><input type="text" name="phone" id="phone"></td>
-	      </tr>
-	      <tr>
-	        <td class="title1">휴대폰번호</td>
-	        <td class="content1"><input type="text" name="locationData_phone" id="locationData_phone"></td>
 	      </tr>
 	      <tr>
 	        <td class="title1">진단내용</td>
@@ -53,14 +49,15 @@
 	      <tr>
 	        <td class="title1">라즈베리파이</td>
 	        <td class="content1"><input type="text" name="raspberry" id="raspberry"></td>
+	      </tr>   
+	      <tr>
+	        <td colspan=2 class="button_field">
+	           <input type="hidden" name="inrollTime" id="inrollTime">	    
+	           <button type="submit" class="button_1">확인</button>
+	        </td>	        
 	      </tr>      
 	    </table>
-	    
-	    <input type="hidden" name="inrollTime" id="inrollTime">
-	    
-	    <button type="submit">확인</button>
-	    
-	  </div>
+	</dev>	
   </form>
 </dev>
 </body>

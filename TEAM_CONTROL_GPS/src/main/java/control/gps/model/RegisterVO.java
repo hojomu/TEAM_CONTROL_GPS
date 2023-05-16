@@ -2,7 +2,6 @@ package control.gps.model;
 
 public class RegisterVO {
 	private String phone;
-	private String locationData_phone;
 	private String name;
 	private String personalNumber;
 	private String inrollTime;
@@ -17,12 +16,6 @@ public class RegisterVO {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-	public String getLocationData_phone() {
-		return locationData_phone;
-	}
-	public void setLocationData_phone(String locationData_phone) {
-		this.locationData_phone = locationData_phone;
 	}
 	public String getName() {
 		return name;
@@ -75,7 +68,7 @@ public class RegisterVO {
 	
 	@Override
 	public String toString() {
-		return "RegisterVO > phone="+phone+", locationData_phone="+locationData_phone+", name="+name+
+		return "RegisterVO > phone="+phone+", name="+name+
 				", personalNumber="+personalNumber+", inrollTime="+inrollTime+", disease="+disease+", adress="+adress+
 				", guardianName="+guardianName+", guardianPhone="+guardianPhone+", raspberry="+raspberry;
 	}
