@@ -31,10 +31,6 @@
 	        <td class="content1"><input type="text" name="phone" id="phone"></td>
 	      </tr>
 	      <tr>
-	        <td class="title1">휴대폰번호</td>
-	        <td class="content1"><input type="text" name="locationData_phone" id="locationData_phone"></td>
-	      </tr>
-	      <tr>
 	        <td class="title1">진단내용</td>
 	        <td class="content1"><input type="text" name="disease" id="disease"></td>
 	      </tr>
