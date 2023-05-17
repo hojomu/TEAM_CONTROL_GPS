@@ -10,6 +10,7 @@ public class RegisterVO {
 	private String guardianName;
 	private String guardianPhone;
 	private String raspberry;
+	private String hospital;
 	
 	public String getPhone() {
 		return phone;
@@ -65,12 +66,19 @@ public class RegisterVO {
 	public void setRaspberry(String raspberry) {
 		this.raspberry = raspberry;
 	}
+	public String getHospital() {
+		return hospital;
+	}
+	public void setHospital(String hospital) {
+		this.hospital = hospital;
+	}
 	
 	@Override
 	public String toString() {
 		return "RegisterVO > phone="+phone+", name="+name+
 				", personalNumber="+personalNumber+", inrollTime="+inrollTime+", disease="+disease+", adress="+adress+
-				", guardianName="+guardianName+", guardianPhone="+guardianPhone+", raspberry="+raspberry;
+				", guardianName="+guardianName+", guardianPhone="+guardianPhone+", raspberry="+raspberry+", hospital="+hospital;
 	}
+	
 
 }

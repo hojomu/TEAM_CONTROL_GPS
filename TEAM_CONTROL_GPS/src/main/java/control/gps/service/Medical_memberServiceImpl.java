@@ -1,5 +1,7 @@
 package control.gps.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class Medical_memberServiceImpl implements Medical_memberService {
 		mm.usermember(member);
 	};
 	
-	
+	public ArrayList<RegisterVO> getPatientsData(RegisterVO data){
+		return mm.getPatientsData(data);
+	}
+
 
 }

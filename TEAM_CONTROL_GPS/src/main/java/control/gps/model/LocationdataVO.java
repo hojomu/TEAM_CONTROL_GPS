@@ -42,7 +42,7 @@ public class LocationdataVO {
 	
 	@Override
 	public String toString() {
-		return "LocationdataVO [x=" + x + ", y=" + y + ", phone=" + phone + ", getTime=" + getTime + ", phone=" + phone + "]";
+		return "LocationdataVO [x=" + x + ", y=" + y + ", phone=" + phone + ", getTime=" + getTime + ", name=" + name + "]";
 	}
 	
 }

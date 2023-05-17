@@ -11,5 +11,12 @@
 	  INSERT INTO register(name, phone, personalNumber, inrollTime, disease, adress, guardianName, guardianPhone, raspberry)
 	  VALUES (#{name}, #{phone}, #{personalNumber}, now(), #{disease}, #{adress}, #{guardianName}, #{guardianPhone}, #{raspberry})
 	</insert>
+	
+	<!-- 환자 리스트 불러오기 -->
+	<select id="getPatientsData" resultType="control.gps.model.RegisterVO">
+		select *
+		from register
+		where hospital = #{hospital}
+	</select>
 
 </mapper>

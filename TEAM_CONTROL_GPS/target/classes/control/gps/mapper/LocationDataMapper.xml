@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="control.gps.mapper.LocationDataMapper">
+
+	<!-- insert -->
+	<select id="getLocationData" resultType="control.gps.model.LocationdataVO">
+		SELECT ld.*
+		FROM locationdata ld
+		INNER JOIN (
+		    SELECT name, phone
+		    FROM register
+		    WHERE hospital = #{hospital}
+		    GROUP BY name, phone
+		) r ON ld.name = r.name AND ld.phone = r.phone
+		INNER JOIN (
+		    SELECT name, phone, MAX(getTime) as maxTime
+		    FROM locationdata
+		    GROUP BY name, phone
+		) t ON ld.name = t.name AND ld.phone = t.phone AND ld.getTime = t.maxTime
+	</select>
+
+</mapper>
