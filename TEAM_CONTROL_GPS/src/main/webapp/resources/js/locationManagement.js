@@ -9,6 +9,8 @@ var options = { //지도를 생성할 때 필요한 기본 옵션
 	level: 3 //지도의 레벨(확대, 축소 정도)
 };
 
+// 집중 환자 마커 이미지
+var focusedImageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
 //마커 리 랜더링을 위해 배열 생성
 markers = [];
@@ -38,7 +40,7 @@ function TooltipMarker(position, tooltipText) {
     };
 }
 
-//AbstractOverlay 상속. 프로토타입 체인을 연결합니다.
+// AbstractOverlay 상속. 프로토타입 체인을 연결합니다.
 TooltipMarker.prototype = new kakao.maps.AbstractOverlay;
 
 // AbstractOverlay의 필수 구현 메소드.
@@ -108,7 +110,7 @@ function MarkerTracker(map, target) {
     var CLIP_BUFFER = 40;
 
     // trakcer 엘리먼트
-    tracker = document.createElement('div');
+    var tracker = document.createElement('div');
     tracker.className = 'tracker';
 
     // 내부 아이콘
@@ -350,37 +352,61 @@ function MarkerTracker(map, target) {
         setVisible(false);
     };
 }
+
 // 툴팁 마커 끝
 
 // 환자 집중 관찰 함수
 function focusToPatient(event){
 	console.log(event);
-	console.log(markers);
 	
 	// 기존의 마커 생성 멈춤
 	clearInterval(intervalId);
 	
 	// 마커 삭제
 	let trackerElements = document.querySelectorAll('.tracker');
+	console.log(trackerElements);
 	for(let i = 0; i < markers.length; i++){
 		markers[i].setMap(null);
-		var tracker = trackerElements[i];
-		tracker.parentNode.removeChild(tracker);
+		
+		if(trackerElements.length > 0)	{
+		var trackerKill = trackerElements[i];
+		trackerKill.parentNode.removeChild(trackerKill);
+		}
 	}
-	markers = [];
 	
 	// 특정 환자의 위치 정보 받아오는 함수 호출
 	let li = event.target;
 	let phone = li.dataset.key;
 	let name = li.textContent;
 	
+	// 환자 위치 저장 딕셔너리
+	var position = {};
+	
 	$.getJSON("/focusToPatient/"+name+"/"+phone+".json",function(data){
 		console.log(data);
 		
+		//마커 옵션
+		var focusedImageSize = new kakao.maps.Size(24, 35); 
+		var focusedMarkerImage = new kakao.maps.MarkerImage(focusedImageSrc, focusedImageSize);
+		
+		var position = {
+				title: data.name,
+				latlng: new kakao.maps.LatLng(data.x, data.y)
+		};
+		
 		// 마커 생성 ( 지속적으로 생성되야함 )
+		var focusedMarker = new kakao.maps.Marker({
+	        map: map, // 마커를 표시할 지도
+	        position: position.latlng, // 마커를 표시할 위치
+	        title : position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+	        image : focusedMarkerImage // 마커 이미지 
+	    });
+		
+		markers.push(focusedMarker);
 		
 		// 맵 center 갱신 ( 한번만 )
-		
+		var moveLatLon = position.latlng;
+		map.panTo(moveLatLon);
 	})
 	
 }
@@ -392,18 +418,21 @@ function makeMarkers(hospital){
 	let trackerElements = document.querySelectorAll('.tracker');
 	for(let i = 0; i < markers.length; i++){
 		markers[i].setMap(null);
-		var tracker = trackerElements[i];
-		tracker.parentNode.removeChild(tracker);
+		
+		if(trackerElements.length > 0)	{
+		var trackerKill = trackerElements[i];
+		trackerKill.parentNode.removeChild(trackerKill);
+		}
 	}
+	
 	markers = [];
+	console.log("trackerElements : "+trackerElements);
 	
 	// 병원 이름을 바탕으로 환자 정보를 불러오고, 환자 정보를 바탕으로 위치 데이터를 받아와야한다.
 	$.getJSON("/getLocationData/"+hospital+".json",function(data){
 		console.log(data);
 		
-		//let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-		let patientsMarkers = [];
-		let patientsTrackers = [];
+		let markerTrackers = [];
 		
 		// 받아온 데이터 for 문
 		for(let i = 0; i < data.length; i++){
@@ -412,40 +441,24 @@ function makeMarkers(hospital){
 			
 			// TooltipMarker 생성
 			let marker = new TooltipMarker(position, data[i].name);
-			patientsMarkers.push(marker);
-            console.log("marker:"+marker);
+            marker.setMap(map);
+			markers.push(marker);
 			
+			console.log("marker:"+marker);
+            
 			// MarkerTracker 생성
-			let tracker = new MarkerTracker(map, marker);
-            patientsTrackers.push(tracker);
-            console.log("tracker:"+tracker);
+			var markerTracker = new MarkerTracker(map, marker);
+			markerTrackers.push(markerTracker);
+			
             
 		}
 		
-		for(let i = 0; i < patientsMarkers.length; i++){
-			
-			// 마커 이미지 크기 설정
-			//let imageSize = new kakao.maps.Size(24,35);
-			// 마커 이미지 생성
-			//let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-			
-			// 마커 생성
-			/*let marker = new kakao.maps.Marker({
-				map: map,
-				position: patientsPositions[i].latlng,
-				title: patientsPositions[i].title,
-				image: markerImage
-			});*/
-			
-			patientsMarkers[i].setMap(map);
-            patientsTrackers[i].run();
-            markers.push(patientsMarkers[i]);
-			
+		for(let i = 0; i < markerTrackers.length; i++){
+			markerTrackers[i].run();
 		}
 		
-		console.log(patientsMarkers);
-		console.log(patientsTrackers);
 		console.log(markers);
+		console.log(markerTrackers);
 		
 	})
 }
