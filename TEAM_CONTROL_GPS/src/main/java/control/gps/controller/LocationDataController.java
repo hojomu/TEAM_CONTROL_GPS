@@ -25,7 +25,12 @@ public class LocationDataController {
 		return new ResponseEntity<>(ls.getLocationData(data),HttpStatus.OK);
 	}
 
-
+	// 특정 환자의 위치 정보
+	@RequestMapping(value = "/focusToPatient/{name}/{phone}", method = RequestMethod.GET)
+	public ResponseEntity<LocationdataVO> focusToPatient(RegisterVO data){
+		System.out.println(data);
+		return new ResponseEntity<>(ls.focusToPatient(data),HttpStatus.OK);
+	}
 
 
 

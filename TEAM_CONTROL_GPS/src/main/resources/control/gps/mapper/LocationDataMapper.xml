@@ -6,7 +6,7 @@
   
 <mapper namespace="control.gps.mapper.LocationDataMapper">
 
-	<!-- insert -->
+	<!-- 전체 환자 위치 정보 불러오기 -->
 	<select id="getLocationData" resultType="control.gps.model.LocationdataVO">
 		SELECT ld.*
 		FROM locationdata ld
@@ -21,6 +21,18 @@
 		    FROM locationdata
 		    GROUP BY name, phone
 		) t ON ld.name = t.name AND ld.phone = t.phone AND ld.getTime = t.maxTime
+	</select>
+	
+	<!-- 특정 환자의 위치 정보 -->
+	<select id="focusToPatient" resultType="control.gps.model.LocationdataVO">
+		SELECT *
+		FROM locationdata
+		WHERE name = #{name} AND phone = #{phone}
+		AND getTime = (
+		    SELECT MAX(getTime)
+		    FROM locationdata
+		    WHERE name = #{name} AND phone = #{phone}
+		)
 	</select>
 
 </mapper>
