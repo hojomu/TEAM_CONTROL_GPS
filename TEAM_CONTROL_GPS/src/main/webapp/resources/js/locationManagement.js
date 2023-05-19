@@ -12,6 +12,8 @@ var options = { //지도를 생성할 때 필요한 기본 옵션
 // 집중 환자 마커 이미지
 var focusedImageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
+let intervalFocus;
+
 //마커 리 랜더링을 위해 배열 생성
 markers = [];
 
@@ -355,12 +357,11 @@ function MarkerTracker(map, target) {
 
 // 툴팁 마커 끝
 
-// 환자 집중 관찰 함수
-function focusToPatient(event){
-	console.log(event);
+// 집중 관찰 환자 위치 불러오기
+function getFocusLocation(props){
 	
-	// 기존의 마커 생성 멈춤
-	clearInterval(intervalId);
+	// 환자 위치 저장 딕셔너리
+	var position = {};
 	
 	// 마커 삭제
 	let trackerElements = document.querySelectorAll('.tracker');
@@ -374,22 +375,14 @@ function focusToPatient(event){
 		}
 	}
 	
-	// 특정 환자의 위치 정보 받아오는 함수 호출
-	let li = event.target;
-	let phone = li.dataset.key;
-	let name = li.textContent;
-	
-	// 환자 위치 저장 딕셔너리
-	var position = {};
-	
-	$.getJSON("/focusToPatient/"+name+"/"+phone+".json",function(data){
+	$.getJSON("/focusToPatient/"+props.name+"/"+props.phone+".json",function(data){
 		console.log(data);
 		
 		//마커 옵션
 		var focusedImageSize = new kakao.maps.Size(24, 35); 
 		var focusedMarkerImage = new kakao.maps.MarkerImage(focusedImageSrc, focusedImageSize);
 		
-		var position = {
+		position = {
 				title: data.name,
 				latlng: new kakao.maps.LatLng(data.x, data.y)
 		};
@@ -404,12 +397,31 @@ function focusToPatient(event){
 		
 		markers.push(focusedMarker);
 		
-		// 맵 center 갱신 ( 한번만 )
+		// 맵 center 갱신
 		var moveLatLon = position.latlng;
 		map.panTo(moveLatLon);
-	})
+	});
+};
+
+// 환자 집중 관찰 함수
+function focusToPatient(event){
+	console.log(event);
 	
-}
+	// 기존의 마커 생성 멈춤
+	clearInterval(intervalId);
+	clearInterval(intervalFocus);
+	
+	// 특정 환자의 위치 정보 받아오는 함수 호출
+	let li = event.target;
+	let phone = li.dataset.key;
+	let name = li.textContent;
+	
+	getFocusLocation({name:name,phone:phone});
+	intervalFocus = setInterval(function() {
+		getFocusLocation({name:name,phone:phone});
+	}, 5000);
+	
+};
 
 
 //병원에 속한 모든 환자 정보(위치) 받아오기
@@ -463,8 +475,10 @@ function makeMarkers(hospital){
 	})
 }
 
+const hospitalNameBox = document.getElementById('hospitalNameBox');
 // 병원의 환자 정보(리스트) 받아오기
 function getPatientInfo(hospital){
+	hospitalNameBox.innerText = hospital;
 	// 병원 이름을 바탕으로 환자 정보를 불러오고, 환자 정보를 바탕으로 위치 데이터를 받아와야한다.
 	$.getJSON("/getPatientsData/"+hospital+".json",function(data){
 		console.log(data);
@@ -488,6 +502,19 @@ function getPatientInfo(hospital){
 	}, 5000);
 	
 }
+
+// 포커싱 리셋 버튼
+const focusResetBtn = document.getElementById('focusResetBtn');
+focusResetBtn.addEventListener('click',function(){
+	let hospital = hospitalNameBox.innerText;
+	clearInterval(intervalFocus);
+	clearInterval(intervalId);
+	
+	makeMarkers(hospital);
+	intervalId = setInterval(function() {
+		makeMarkers(hospital);
+	}, 5000);
+})
 
 // 병원 정보 받아오기
 function getHospitalInfo(hospital){ // props를 받을 것

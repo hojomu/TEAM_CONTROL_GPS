@@ -18,6 +18,7 @@
 
 	<header class="initial-disnone">
 		<div id="logoBox">로고</div>
+		<div id="hospitalNameBox"></div>
 		<div id="accountBox">계정 관련</div>
 	</header>
 
@@ -27,11 +28,14 @@
 				<div id="searchBox">
 					<input type="text">
 					<button type="button">검색하기</button>
+					<button id="focusResetBtn" type="button">포커싱 리셋</button>
 				</div>
 				<div id="customerList">
 					<ul id="customerListUl">
 					</ul>
 				</div>
+				
+				
 			</div>
 			
 			<div id="mapWrap">
