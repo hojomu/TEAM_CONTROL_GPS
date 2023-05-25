@@ -39,11 +39,12 @@
 					<button type="button" class="patient-search-button">검색</button>
 					<button id="focusResetBtn" type="button" class="patient-search-reset">리셋</button>
 				</div>
+				
 				<div id="customerList">
 					<ul id="customerListUl">
 					</ul>
 				</div>
-				
+				<button type="button" onclick="location.href='member'" class="member_button">등록</button>
 				
 			</div>
 			

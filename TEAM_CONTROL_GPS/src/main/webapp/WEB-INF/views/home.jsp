@@ -10,8 +10,8 @@
 <body>
 
     <div class="main_button">
-        <button type="button" onclick="location.href='http://localhost:8080/Geolocation'" value="환자용">환자용</button>
-        <button type="button" onclick="location.href='http://localhost:8080/locationManagement'" value="병원용">병원용</button>
+        <button type="button" onclick="location.href='Geolocation'" value="환자용">환자용</button>
+        <button type="button" onclick="location.href='locationManagement'" value="병원용">병원용</button>
     </div>
     
     <!-- <a href="/a">a 이동</a> -->

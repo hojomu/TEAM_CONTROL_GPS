@@ -268,6 +268,21 @@ header {
 	display:none;
 }
 
+.member_button{
+	font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 7px 30px;
+    border-radius: 4px;
+    transition: 0.5s;
+    line-height: 1;
+    color: #fff;
+    background: #4492ff;
+    border: none;
+    margin: 5px;
+}
+
 /* .hospital_search_box{
 
 } */
