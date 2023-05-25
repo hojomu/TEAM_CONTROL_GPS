@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +7,11 @@
 
 	<!-- member.css -->
 	<link rel="stylesheet" href="/resources/css/member.css"></link>	
+
 </head>
 <body>
 <div class="container">
-  <form action="/member" method="post" id="member">
+  <form action="/member" method="POST">
 	<div class="item">
 	    <table class="table1">
 	      <colgroup>
@@ -36,7 +36,7 @@
 	      </tr>
 	      <tr>
 	        <td class="title1">주소</td>
-	        <td class="content1"><input type="text" name="adress" id="adress"></td>
+	        <td class="content1"><input type="text" name="address" id="address"></td>
 	      </tr>
 	      <tr>
 	        <td class="title1">보호자성명</td>
@@ -49,6 +49,10 @@
 	      <tr>
 	        <td class="title1">라즈베리파이</td>
 	        <td class="content1"><input type="text" name="raspberry" id="raspberry"></td>
+	      </tr>   
+		  <tr>
+	        <td class="title1">병원</td>
+	        <td class="content1"><input type="text" name="hospital" id="hospital"></td>
 	      </tr>   
 	      <tr>
 	        <td colspan=2 class="button_field">

@@ -23,10 +23,11 @@ public class Medical_memberController {
 		return "member";
 	}
 	
+	// 환자 정보 insert 하기
 	@RequestMapping(value = "/member", method = RequestMethod.POST) 
 	public String usermember(RegisterVO member) {
-		ms.usermember(member);
 		System.out.println(member);
+		ms.usermember(member);
 		return "member";
 	}
 	
@@ -36,6 +37,5 @@ public class Medical_memberController {
 		System.out.println(data);
 		return new ResponseEntity<>(ms.getPatientsData(data),HttpStatus.OK);
 	}
-	
 	
 }

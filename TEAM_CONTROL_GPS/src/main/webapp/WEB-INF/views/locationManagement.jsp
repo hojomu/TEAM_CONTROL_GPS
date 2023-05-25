@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,9 +10,17 @@
 
 </head>
 <body>
-	<div id="hospital-check">
-		<input id="hospital" name="hospital" type="text" placeholder="병원 정보를 입력하세요">
-		<button id="hospital-check-btn" type="button">확인</button>
+	<div id="hospitalCheck">
+		<select id="cityDataSelect">
+		</select>
+			<input id="hospital" name="hospital" type="text" placeholder="병원 정보를 입력하세요">
+			<button id="hospital-check-btn" type="button">확인</button>
+	</div>
+
+	<div id="hospitalListBox" class="initial-disnone">
+		<ul id="hospitalList">
+
+		</ul>
 	</div>
 
 	<header class="initial-disnone">

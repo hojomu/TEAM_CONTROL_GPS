@@ -8,8 +8,8 @@
 
 	<!-- insert -->
 	<insert id="usermember">
-	  INSERT INTO register(name, phone, personalNumber, inrollTime, disease, adress, guardianName, guardianPhone, raspberry)
-	  VALUES (#{name}, #{phone}, #{personalNumber}, now(), #{disease}, #{adress}, #{guardianName}, #{guardianPhone}, #{raspberry})
+	  INSERT INTO register(name, phone, personalNumber, inrollTime, disease, adress, guardianName, guardianPhone, raspberry, hospital)
+	  VALUES (#{name}, #{phone}, #{personalNumber}, now(), #{disease}, #{adress}, #{guardianName}, #{guardianPhone}, #{raspberry}, #{hospital})
 	</insert>
 	
 	<!-- 환자 리스트 불러오기 -->

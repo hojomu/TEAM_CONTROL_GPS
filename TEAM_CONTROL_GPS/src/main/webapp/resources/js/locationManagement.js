@@ -1,13 +1,17 @@
 /**
  * 
  */
-
 // 카카오맵 설정
 var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 var options = { //지도를 생성할 때 필요한 기본 옵션
-	center: new kakao.maps.LatLng(35.53942967185377, 129.33628189825467), //지도의 중심좌표.
-	level: 3 //지도의 레벨(확대, 축소 정도)
+    center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+    level: 3 //지도의 레벨(확대, 축소 정도)
 };
+
+
+const apiUrl = "https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList";
+const serviceKey = "h2ypgTwYrtNcvQ3ZsS%2B5Nz0kFSgTSkQWd1FXJYNRncmkSaVyPtpiFz5R3qxWUQwBIWuAdRKDI2his%2FECaRPniA%3D%3D";
+const numOfRows = 1500; // 한 번에 가져올 데이터 개수
 
 // 집중 환자 마커 이미지
 var focusedImageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
@@ -375,7 +379,7 @@ function getFocusLocation(props){
 		}
 	}
 	
-	$.getJSON("/focusToPatient/"+props.name+"/"+props.phone+".json",function(data){
+	$.getJSON("/focusToPatient/"+props.name+"/"+props.phone,function(data){
 		console.log(data);
 		
 		//마커 옵션
@@ -386,7 +390,7 @@ function getFocusLocation(props){
 				title: data.name,
 				latlng: new kakao.maps.LatLng(data.x, data.y)
 		};
-		
+
 		// 마커 생성 ( 지속적으로 생성되야함 )
 		var focusedMarker = new kakao.maps.Marker({
 	        map: map, // 마커를 표시할 지도
@@ -441,7 +445,7 @@ function makeMarkers(hospital){
 	console.log("trackerElements : "+trackerElements);
 	
 	// 병원 이름을 바탕으로 환자 정보를 불러오고, 환자 정보를 바탕으로 위치 데이터를 받아와야한다.
-	$.getJSON("/getLocationData/"+hospital+".json",function(data){
+	$.getJSON("/getLocationData/"+hospital,function(data){
 		console.log(data);
 		
 		let markerTrackers = [];
@@ -462,7 +466,6 @@ function makeMarkers(hospital){
 			var markerTracker = new MarkerTracker(map, marker);
 			markerTrackers.push(markerTracker);
 			
-            
 		}
 		
 		for(let i = 0; i < markerTrackers.length; i++){
@@ -476,11 +479,12 @@ function makeMarkers(hospital){
 }
 
 const hospitalNameBox = document.getElementById('hospitalNameBox');
+
 // 병원의 환자 정보(리스트) 받아오기
 function getPatientInfo(hospital){
 	hospitalNameBox.innerText = hospital;
 	// 병원 이름을 바탕으로 환자 정보를 불러오고, 환자 정보를 바탕으로 위치 데이터를 받아와야한다.
-	$.getJSON("/getPatientsData/"+hospital+".json",function(data){
+	$.getJSON("/getPatientsData/"+hospital,function(data){
 		console.log(data);
 		
 		let str = "";
@@ -488,7 +492,7 @@ function getPatientInfo(hospital){
 		// 받아온 데이터 for 문
 		for(let i = 0; i < data.length; i++){
 			// 환자 리스트 생성
-			str+="<li class='patientName' data-key='"+data[i].phone+"'>"+data[i].name+"</li>"
+			str+="<li class='patientName' data-key='"+data[i].phone+"' data-hospital='"+data[i].hospital+"'>"+data[i].name+"</li>"
 		}
 		
 		$("#customerListUl").html(str);
@@ -516,44 +520,127 @@ focusResetBtn.addEventListener('click',function(){
 	}, 5000);
 })
 
-// 병원 정보 받아오기
-function getHospitalInfo(hospital){ // props를 받을 것
-	
-	// 병원의 x, y 좌표를 얻어올 것.
-	
-	/* let newCenter = new kakao.maps.LatLng(lat, lng);
-	 * map.setCenter() 병원의 좌표를 설정해서 맵의 중심을 변경해주자*/
-	
-	/*map은 모든 css가 변경되고 나서 호출되어야 정확한 크기를 나타낼 수 있다.
-	위에서 disnone 같은 css의 변경이 끝났다면, 아래의 메소드로 다시 한번 map을 갱신해줘야한다.*/
-	map.relayout();
-	
-	getPatientInfo(hospital); // 병원의 이름 넘겨주기
+// 병원 클릭 시 이벤트
+function hospitalClick(event){
+    let hospital = event.target.getAttribute("data-key");
+    let hospitalXPos = event.target.getAttribute("data-x");
+    let hospitalYPos = event.target.getAttribute("data-y");
+    
+    let hospitalListBox = document.querySelector('#hospitalListBox');
+    let initDisnones = document.querySelectorAll('.initial-disnone');
+    
+    hospitalListBox.classList.add('disnone');
+
+    for (let i = 0; i < initDisnones.length; i++) {
+        initDisnones[i].classList.remove('initial-disnone');
+    }
+    map.relayout();
+
+    var hospitalLatLon = new kakao.maps.LatLng(hospitalYPos, hospitalXPos);
+    map.setCenter(hospitalLatLon); 
+
+    //마커 옵션
+    var hospitalImageSize = new kakao.maps.Size(24, 35); 
+    var hospitalImageSrc = '/resources/img/hospitalMarker.png'
+    var hospitalMarkerImage = new kakao.maps.MarkerImage(hospitalImageSrc, hospitalImageSize);
+    
+
+    var hospitalMarker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: hospitalLatLon, // 마커를 표시할 위치
+        title : hospital, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : hospitalMarkerImage // 마커 이미지 
+    });
+    console.log(hospitalMarker);
+
+    getPatientInfo(hospital);
+
+    //getHospitalInfo(hospital); // 병원에 대한 정보 입력 ex) 병원이름
+	makeMarkers(hospital); // 5초 인터벌 없이 마커 생성
+
 }
 
 // 병원 정보 입력 버튼 클릭 시 환자 정보 나타내기 ( 임시 )
 	const hospitalCheckBtn = document.getElementById('hospital-check-btn');
 	
 	hospitalCheckBtn.addEventListener('click',function(){
-		let initDisnones = document.querySelectorAll('.initial-disnone');
-		let hospitalCheckBox = document.querySelector('#hospital-check');
+
+		//let initDisnones = document.querySelectorAll('.initial-disnone');
+		let hospitalCheckBox = document.querySelector('#hospitalCheck');
+        let hospitalListBox = document.querySelector('#hospitalListBox');
+        var cityData = document.getElementById('cityDataSelect').value;
 		let hospital = document.getElementById('hospital').value;
-		
-		for (let i = 0; i < initDisnones.length; i++){
-			initDisnones[i].classList.remove('initial-disnone');
-		}
-		
-		if (hospitalCheckBox){
-			hospitalCheckBox.classList.add('disnone');
-		}
-		
-			getHospitalInfo(hospital); // 병원에 대한 정보 입력 ex) 병원이름
-			makeMarkers(hospital); // 5초 인터벌 없이 마커 생성
+        console.log(hospital);
+
+        hosLi = "";
+
+        // api에서 병원 정보 불러오기
+        $.ajax({
+            type:'GET',
+            dataType:'JSON',
+            url:`${apiUrl}?ServiceKey=${serviceKey}&numOfRows=${numOfRows}&pageNo=1&sidoCd=${cityData}`,
+            error: function(err){
+                console.log(err);
+            },
+            success: function(data){
+                console.log(data);
+                var items = data.response.body.items.item;
+                console.log(items[0].yadmNm)
+
+                for (let i = 0; i < items.length; i++){
+                    if (items[i].yadmNm.includes(hospital)){
+                        hosLi += "<li class='hospitalName' data-x='"+items[i].XPos+"' data-y='"+items[i].YPos+"' data-key='"+items[i].yadmNm+"'>"+items[i].yadmNm+" : "+items[i].addr+"</li>"
+                    }
+                }
+            
+            $("#hospitalList").html(hosLi);
+
+            // li에 이벤트 부여하기
+		    $(document).on("click",".hospitalName",hospitalClick);
+            }
+        })
+
+		hospitalCheckBox.classList.add('disnone');
+		hospitalListBox.classList.remove('initial-disnone');
+
+		//getHospitalInfo(hospital); // 병원에 대한 정보 입력 ex) 병원이름
+		//makeMarkers(hospital); // 5초 인터벌 없이 마커 생성
 		
 	})
 	
-var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-	
-	
 
-	
+const cityData = [
+    { sidoCd:"110000", sidoCdNm:"서울"},
+    { sidoCd:"210000", sidoCdNm:"부산"},
+    { sidoCd:"220000", sidoCdNm:"인천"},
+    { sidoCd:"230000", sidoCdNm:"대구"},
+    { sidoCd:"240000", sidoCdNm:"광주"},
+    { sidoCd:"250000", sidoCdNm:"대전"},
+    { sidoCd:"310000", sidoCdNm:"경기"},
+    { sidoCd:"320000", sidoCdNm:"강원"},
+    { sidoCd:"330000", sidoCdNm:"충북"},
+    { sidoCd:"340000", sidoCdNm:"충남"},
+    { sidoCd:"350000", sidoCdNm:"전북"},
+    { sidoCd:"360000", sidoCdNm:"전남"},
+    { sidoCd:"370000", sidoCdNm:"경북"},
+    { sidoCd:"380000", sidoCdNm:"경남"},
+    { sidoCd:"390000", sidoCdNm:"제주"},
+    { sidoCd:"410000", sidoCdNm:"세종시"},
+]
+
+// 도시 리스트 불러오기
+window.addEventListener('load', function () {
+    var cityDataSelect = document.getElementById('cityDataSelect');
+    
+    option = "<option disabled selected>지역을 선택 해주세요</option>";
+    option += "<option value='260000'>울산</option>";
+    for (let i = 0; i < cityData.length; i++){
+        option += "<option disabled value="+cityData[i].sidoCd+">"+cityData[i].sidoCdNm+"</option>"
+    }
+
+    cityDataSelect.innerHTML = option;
+
+});
+
+
+var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴

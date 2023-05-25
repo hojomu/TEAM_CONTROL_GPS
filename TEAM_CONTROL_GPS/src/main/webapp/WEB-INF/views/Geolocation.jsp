@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +19,7 @@
     
  <input id="btnStop" type="button" value="감시를 끝낸다" />
     
-<script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/resources/js/Geolocation.js"></script>
 </body>
 </html>

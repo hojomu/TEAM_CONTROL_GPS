@@ -15,6 +15,8 @@
 <a href="/Geolocation">사용자위치 확인용</a>
 <a href="/kakaoMapEx">카카오맵 확인용</a>
 <a href="/locationManagement">locationManagement 이동</a>
+<a href="/a">a 이동</a>
+<a href="/member">member 이동</a>
 
 </body>
 </html>
