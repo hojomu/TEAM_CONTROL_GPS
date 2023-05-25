@@ -4,19 +4,24 @@
 <html>
 <head>
 	<title>Home</title>
+	<!-- css -->
+	<link rel="stylesheet" href="/resources/css/home.css">
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
 
-<P>  The time on the server is ${serverTime}. </P>
+    <div class="main_button">
+        <button type="button" onclick="location.href='http://localhost:8080/Geolocation'" value="환자용">환자용</button>
+        <button type="button" onclick="location.href='http://localhost:8080/locationManagement'" value="병원용">병원용</button>
+    </div>
+    
+    <!-- <a href="/a">a 이동</a> -->
+    <!-- <a href="/member">member 이동</a> -->
 
-<a href="/Geolocation">사용자위치 확인용</a>
-<a href="/kakaoMapEx">카카오맵 확인용</a>
-<a href="/locationManagement">locationManagement 이동</a>
-<a href="/a">a 이동</a>
-<a href="/member">member 이동</a>
+    <!-- <form method="POST" action="/insert">
+        <label for="name">이름</label>
+        <input type="text" name="name" id="name">
+        <button type="submit">제출</button>
+    </form> -->
 
 </body>
 </html>
